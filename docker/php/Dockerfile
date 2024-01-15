@@ -4,6 +4,10 @@ FROM php:8.2-fpm-alpine
 RUN apk add --no-cache curl git build-base zlib-dev oniguruma-dev autoconf bash
 RUN apk add --update linux-headers
 
+
+RUN apk add --no-cache icu-dev
+RUN docker-php-ext-configure intl
+RUN docker-php-ext-install intl
 # Xdebug
 ARG INSTALL_XDEBUG=false
 RUN if [ ${INSTALL_XDEBUG} = true ]; \
@@ -14,7 +18,7 @@ RUN if [ ${INSTALL_XDEBUG} = true ]; \
 COPY ./docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Postgres
-RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_pgsql
+RUN apk add --no-cache libpq-dev && docker-php-ext-install pdo_mysql
 
 # Configure non-root user.
 ARG PUID=1000
