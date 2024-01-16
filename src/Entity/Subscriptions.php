@@ -4,8 +4,12 @@ namespace App\Entity;
 
 use App\Repository\SubscriptionsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SubscriptionsRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[UniqueEntity('url')]
 class Subscriptions
 {
     #[ORM\Id]
@@ -13,17 +17,18 @@ class Subscriptions
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Url]
     private ?string $url = null;
 
-    #[ORM\Column(nullable: true)]
+    #[ORM\Column(nullable: true, options:["default"=> 0])]
     private ?float $price = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    #[ORM\Column(nullable: false, options:["default"=> "CURRENT_TIMESTAMP"])]
+    private ?\DateTimeImmutable $createdAt;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt ;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
@@ -92,5 +97,22 @@ class Subscriptions
         $this->userId = $userId;
 
         return $this;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PrePersist]
+    public function setPriceValue()
+    {
+        $this->price = 0;
+    }
+
+    public function __toString(): string
+    {
+        return $this->url.' '.$this->price.' '.$this->userId->getName().' '.$this->userId->getEmail();
     }
 }

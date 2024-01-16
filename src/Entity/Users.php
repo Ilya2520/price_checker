@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Entity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use App\Repository\UsersRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
+#[UniqueEntity('email')]
 class Users
 {
     #[ORM\Id]
@@ -16,7 +19,8 @@ class Users
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Assert\Email]
     private ?string $email = null;
 
     public function getId(): ?int
@@ -46,5 +50,9 @@ class Users
         $this->email = $email;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->email;
     }
 }

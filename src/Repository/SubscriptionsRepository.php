@@ -24,17 +24,27 @@ class SubscriptionsRepository extends ServiceEntityRepository
 //    /**
 //     * @return Subscriptions[] Returns an array of Subscriptions objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function findByExampleField(): array
+    {
+        $arr=  $this->createQueryBuilder('s')
+            ->andWhere('s.price > 0 and s.updatedAt is not null')
+            ->orderBy('s.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+//        $entityManager = $this->getEntityManager();
+//
+//        $query = $entityManager->createQuery(
+//            'SELECT p
+//            FROM App\Entity\Subscriptions p
+//            WHERE p.price > 0 and p.updatedAt  IS NOT NULL
+//            ORDER BY p.price ASC'
+//        );
+        return $arr;
+    }
+
+
 
 //    public function findOneBySomeField($value): ?Subscriptions
 //    {

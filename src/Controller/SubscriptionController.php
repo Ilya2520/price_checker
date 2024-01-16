@@ -3,37 +3,52 @@
 namespace App\Controller;
 
 use App\Entity\Users;
+use App\Repository\SubscriptionsRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Subscriptions;
-use DateTimeImmutable;
-use DateTimeZone;
+use Twig\Environment;
+use Symfony\Component\HttpFoundation\JsonResponse;
 class SubscriptionController extends AbstractController
 {
-    #[Route('/subscription', name: 'app_subscription')]
-    public function index(ManagerRegistry $doctrine): Response
+    #[Route('/subscriptions', name: 'subscriptions')]
+    public function index(SubscriptionsRepository $subscriptionsRepository): Response
     {
-        $enMn= $doctrine->getManager();
-        $subscription = new Subscriptions();
-        $subscription->setUrl('url');
-        $subscription->setPrice(100);
-        $now = new DateTimeImmutable('now', new DateTimeZone('Europe/Moscow'));
-        $subscription->setCreatedAt($now);
-        $us= new Users();
-        $us->setEmail("ilya@mail.ru");
-        $us->setName("ilya emelyanov");
-        $enMn->persist($us);
-        $enMn->flush();
-        $subscription->setUserId($us);
-        $subscription->setUpdatedAt($now);
+        return $this->render('subscription/index.html.twig', [
+            'subscriptions' => $subscriptionsRepository->findAll(),
+        ]);
 
-        $enMn->persist($subscription);
+    }
+    #[Route('/subscription/{id}', name: 'subscription')]
+    public function show(Environment $twig, Subscriptions $subscription): Response
+    {
+        return new Response($twig->render('subscription/show.html.twig', [
+            'subscription' => $subscription,
+        ]));
+    }
+    #[Route('api/subscription/{id}', name: 'subscription')]
+    public function shows(Subscriptions $subscription)
+    {
+        $subscription->getUpdatedAt()? $upd =$subscription->getUpdatedAt()->format("D, d M y H:i:s") :$upd = null ;
+            return new JsonResponse(['id'=>$subscription->getId(),
+                'User_mail'=>$subscription->getUserId()->getEmail(),
+                'User_name'=>$subscription->getUserId()->getName(),
+                "price"=>$subscription->getPrice(),
+                "url"=>$subscription->getUrl(),
+                "created_at"=>$subscription->getCreatedAt()->format("D, d M y H:i:s"),
+                "updated_at"=>$upd
+                ]);
 
-        // действительно выполните запросы (например, запрос INSERT)
-        $enMn->flush();
+    }
 
-        return new Response('Saved new product with id '.$subscription->getId());
+    #[Route('/sub', name: 'sub')]
+    public function index1(SubscriptionsRepository $subscriptionsRepository): Response
+    {
+        return $this->render('subscription/index.html.twig', [
+            'subscriptions' => $subscriptionsRepository->findByExampleField(),
+        ]);
+
     }
 }
