@@ -34,7 +34,7 @@ class SendNotifications extends Command
 
         $this->mailerService->sendEmail();
 
-        $output->writeln('User successfully generated!');
+        $output->writeln('Emails successfully send!');
 
         return Command::SUCCESS;
     }

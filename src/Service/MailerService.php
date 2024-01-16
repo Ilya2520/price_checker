@@ -14,15 +14,18 @@ class MailerService
         $this->subscriptionsRepository=$subscriptionsRepository;
     }
 
-    public function sendEmail()
+    public function sendEmail():void
     {
-        $res = [];
         $arr = $this->subscriptionsRepository->findByExampleField();
         foreach ($arr as $ar){
-             $res[]= [$ar->getUserId()->getEmail(),$ar->getUserId()->getEmail(), $ar->getPrice() ];
-        }
-        foreach($res as $a){
-            echo "$a[0], $a[1], $a[2] \n" ;
+            $name = $ar->getUserId()->getName();
+            $price = $ar->getPrice();
+            $email = (new Email())
+                ->from('randreq@inbox.ru')
+                ->to($ar->getUserId()->getEmail())
+                ->subject('Price check')
+                ->text("Hello $name, there are a new price on your subscribe, price: $price");
+            $this->mailer->send($email);
         }
 //        $email = (new Email())
 //            ->from('randreq@inbox.ru')
@@ -36,7 +39,5 @@ class MailerService
 //            ->html('<p>See Twig integration for better HTML integration!</p>');
 //
 //        $this->mailer->send($email);
-
-        return "send";
     }
 }

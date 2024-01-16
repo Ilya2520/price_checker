@@ -31,15 +31,20 @@ class SubscriptionController extends AbstractController
     #[Route('api/subscription/{id}', name: 'subscription')]
     public function shows(Subscriptions $subscription)
     {
-        $subscription->getUpdatedAt()? $upd =$subscription->getUpdatedAt()->format("D, d M y H:i:s") :$upd = null ;
-            return new JsonResponse(['id'=>$subscription->getId(),
-                'User_mail'=>$subscription->getUserId()->getEmail(),
-                'User_name'=>$subscription->getUserId()->getName(),
-                "price"=>$subscription->getPrice(),
-                "url"=>$subscription->getUrl(),
-                "created_at"=>$subscription->getCreatedAt()->format("D, d M y H:i:s"),
-                "updated_at"=>$upd
-                ]);
+        if (!$subscription) {
+            $response = new JsonResponse(['message'=>"not found"]);
+            return $response;
+        }
+        $subscription->getUpdatedAt() ? $upd = $subscription->getUpdatedAt()->format("D, d M y H:i:s") : $upd = null ;
+        return new JsonResponse(['id' => $subscription->getId(),
+            'User_mail' => $subscription->getUserId()->getEmail(),
+            'User_name' => $subscription->getUserId()->getName(),
+            "price" => $subscription->getPrice(),
+            "url" => $subscription->getUrl(),
+            "created_at" => $subscription->getCreatedAt()->format("D, d M y H:i:s"),
+            "updated_at" => $upd
+        ]);
+
 
     }
 
