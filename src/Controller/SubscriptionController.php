@@ -45,16 +45,5 @@ class SubscriptionController extends AbstractController
             "created_at" => $subscription->getCreatedAt()->format("D, d M y H:i:s"),
             "updated_at" => $upd
         ]);
-
-
-    }
-
-    #[Route('/sub', name: 'sub')]
-    public function index1(SubscriptionsRepository $subscriptionsRepository): Response
-    {
-        return $this->render('subscription/index.html.twig', [
-            'subscriptions' => $subscriptionsRepository->findUpdPrice(),
-        ]);
-
     }
 }

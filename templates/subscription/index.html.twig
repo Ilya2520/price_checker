@@ -6,6 +6,10 @@
     <h2>Give your feedback!</h2>
 
     {% for subscription in subscriptions %}
-        <h4>{{ subscription }}</h4>
+        <h4>id: {{ subscription.id }}</h4>
+        <p>url: {{ subscription.url }}</p>
+        <p>price: {{ subscription.price }}</p>
+        <p>User email: {{ subscription.userId.email }}</p>
+        <p>User name: {{ subscription.userId.name }}</p>
     {% endfor %}
 {% endblock %}
