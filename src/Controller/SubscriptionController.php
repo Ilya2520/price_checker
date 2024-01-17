@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Users;
 use App\Repository\SubscriptionsRepository;
+use App\Service\SubscriptionService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,21 +30,8 @@ class SubscriptionController extends AbstractController
         ]));
     }
     #[Route('api/subscription/{id}', name: 'subscription')]
-    public function shows($id, SubscriptionsRepository $subscriptionsRepository)
+    public function shows($id, SubscriptionService $subscriptionsService)
     {
-        $subscription =  $subscriptionsRepository->find($id);
-        if (!$subscription) {
-            $response = new JsonResponse(['message'=>"not found"]);
-            return $response->setStatusCode("404");
-        }
-        $subscription->getUpdatedAt() ? $upd = $subscription->getUpdatedAt()->format("D, d M y H:i:s") : $upd = null ;
-        return new JsonResponse(['id' => $subscription->getId(),
-            'User_mail' => $subscription->getUserId()->getEmail(),
-            'User_name' => $subscription->getUserId()->getName(),
-            "price" => $subscription->getPrice(),
-            "url" => $subscription->getUrl(),
-            "created_at" => $subscription->getCreatedAt()->format("D, d M y H:i:s"),
-            "updated_at" => $upd
-        ]);
+        return $subscriptionsService->getResponseToShowConcreate($id);
     }
 }

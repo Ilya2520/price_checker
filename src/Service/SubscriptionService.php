@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Repository\SubscriptionsRepository;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SubscriptionService
 {
@@ -46,5 +48,24 @@ class SubscriptionService
             else echo "$url - your status code: $status change url, current price: 0  \n";
         }
         echo "Total: $total\n";
+    }
+
+
+    function getResponseToShowConcreate($id)
+    {
+        $subscription =  $this->subscriptionsRepository->find($id);
+        if (!$subscription) {
+            $response = new JsonResponse(['message'=>"not found"]);
+            return $response->setStatusCode("404");
+        }
+        $subscription->getUpdatedAt() ? $upd = $subscription->getUpdatedAt()->format("D, d M y H:i:s") : $upd = null ;
+        return new JsonResponse(['id' => $subscription->getId(),
+            'User_mail' => $subscription->getUserId()->getEmail(),
+            'User_name' => $subscription->getUserId()->getName(),
+            "price" => $subscription->getPrice(),
+            "url" => $subscription->getUrl(),
+            "created_at" => $subscription->getCreatedAt()->format("D, d M y H:i:s"),
+            "updated_at" => $upd
+        ]);
     }
 }
