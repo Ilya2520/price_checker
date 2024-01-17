@@ -1,0 +1,28 @@
+#Заполнение таблицы users
+INSERT INTO users (name, email) VALUES
+("John Smith", "johnsmith87@gmail.com"),
+("Elena Petrova", "epetrova92@yahoo.com"),
+("Alex Johnson", "ajohnson@example.com"),
+("Olga Kuznetsova", "olga.kuznetsova@hotmail.com"),
+("Mark Davis", "mdavis345@outlook.com"),
+("Maria Garcia", "mgarcia99@gmail.com"),
+("Pavel Volkov", "volkov_pavel@mail.ru"),
+("Anna Sokolova", "annasokolova78@yahoo.com"),
+("Maxim Ivanov", "max_ivanov@example.com"),
+("Polina Kozlova", "pkozlova123@outlook.com"),
+("Ilya Emelyanov", "ilyaemelyanov2003@mail.ru");
+
+#Заполнение таблицы subscriptions
+
+INSERT INTO subscriptions (user_id_id, url) VALUES
+(1,"https://dummyjson.com/products/1"),
+(11,"https://dummyjson.com/products/2"),
+(11,"https://dummyjson.com/products/3"),
+(11,"https://dummyjson.com/products/4"),
+(11,"https://dummyjson.com/products/5"),
+(2,"https://dummyjson.com/products/6"),
+(3,"https://dummyjson.com/products/7"),
+(5,"https://dummyjson.com/products/8"),
+(6,"https://dummyjson.com/products/9"),
+(7,"https://dummyjson.com/products/10"),
+(4,"https://dummyjson.com/products/11");
