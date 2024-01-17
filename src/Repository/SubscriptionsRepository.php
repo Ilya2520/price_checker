@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Subscriptions;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -21,38 +22,27 @@ class SubscriptionsRepository extends ServiceEntityRepository
         parent::__construct($registry, Subscriptions::class);
     }
 
-//    /**
-//     * @return Subscriptions[] Returns an array of Subscriptions objects
-//     */
-    public function findByExampleField(): array
+    public function findUpdPrice(): array
     {
         $arr=  $this->createQueryBuilder('s')
             ->andWhere('s.price > 0 and s.updatedAt is not null')
             ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;
-//        $entityManager = $this->getEntityManager();
-//
-//        $query = $entityManager->createQuery(
-//            'SELECT p
-//            FROM App\Entity\Subscriptions p
-//            WHERE p.price > 0 and p.updatedAt  IS NOT NULL
-//            ORDER BY p.price ASC'
-//        );
         return $arr;
     }
 
-
-
-//    public function findOneBySomeField($value): ?Subscriptions
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function update($id, $price)
+    {
+        $entityManager = $this->getEntityManager();
+        $query = $entityManager->createQuery(
+            "
+            update App\Entity\Subscriptions as p 
+            SET p.price = $price, p.updatedAt = CURRENT_TIMESTAMP()
+            where p.id = $id
+            "
+        );
+        return $query->getResult();
+    }
 }

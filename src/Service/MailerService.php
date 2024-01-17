@@ -4,6 +4,7 @@ namespace App\Service;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use App\Repository\SubscriptionsRepository;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class MailerService
 {
     private $mailer;
@@ -16,7 +17,8 @@ class MailerService
 
     public function sendEmail():void
     {
-        $arr = $this->subscriptionsRepository->findByExampleField();
+        $arr = $this->subscriptionsRepository->findUpdPrice();
+        $send_emails = 0;
         foreach ($arr as $ar){
             $name = $ar->getUserId()->getName();
             $price = $ar->getPrice();
@@ -25,19 +27,13 @@ class MailerService
                 ->to($ar->getUserId()->getEmail())
                 ->subject('Price check')
                 ->text("Hello $name, there are a new price on your subscribe, price: $price");
-            $this->mailer->send($email);
+            try {
+                $this->mailer->send($email);
+                $send_emails += 1;
+            } catch (TransportExceptionInterface $e) {
+                echo "Error send\n";
+            }
         }
-//        $email = (new Email())
-//            ->from('randreq@inbox.ru')
-//            ->to('ilyaemelyanov2003@mail.ru')
-//            //->cc('cc@example.com')
-//            //->bcc('bcc@example.com')
-//            //->replyTo('fabien@example.com')
-//            //->priority(Email::PRIORITY_HIGH)
-//            ->subject('Time for Symfony Mailer!')
-//            ->text('Sending emails is fun again!')
-//            ->html('<p>See Twig integration for better HTML integration!</p>');
-//
-//        $this->mailer->send($email);
+        echo "Total: $send_emails\n";
     }
 }

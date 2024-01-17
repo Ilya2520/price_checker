@@ -113,6 +113,6 @@ class Subscriptions
 
     public function __toString(): string
     {
-        return $this->url.' '.$this->price.' '.$this->userId->getName().' '.$this->userId->getEmail();
+        return $this->id . '     '.$this->url.' '.$this->price.' '.$this->userId->getName().' '.$this->userId->getEmail();
     }
 }

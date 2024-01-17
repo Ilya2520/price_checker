@@ -16,6 +16,7 @@
         "symfony/flex": "^2.4",
         "symfony/framework-bundle": "^6.4",
         "symfony/google-mailer": "6.*",
+        "symfony/http-client": "6.*",
         "symfony/http-kernel": "^6.4",
         "symfony/mailer": "6.*",
         "symfony/messenger": "^6.4",

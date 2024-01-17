@@ -23,19 +23,13 @@ class SendNotifications extends Command
 
     protected function configure(): void
     {
-        $this
-            // сообщение помощи команды, отображаемое при запуске команды с опцией "--help"
-            ->setHelp('This command allows you to send a notifications...')
+        $this->setHelp('This command allows you to send a notifications...')
         ;
     }
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // ...
-
+        $output->writeln('');
         $this->mailerService->sendEmail();
-
-        $output->writeln('Emails successfully send!');
-
         return Command::SUCCESS;
     }
 }

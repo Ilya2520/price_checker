@@ -29,11 +29,12 @@ class SubscriptionController extends AbstractController
         ]));
     }
     #[Route('api/subscription/{id}', name: 'subscription')]
-    public function shows(Subscriptions $subscription)
+    public function shows($id, SubscriptionsRepository $subscriptionsRepository)
     {
+        $subscription =  $subscriptionsRepository->find($id);
         if (!$subscription) {
             $response = new JsonResponse(['message'=>"not found"]);
-            return $response;
+            return $response->setStatusCode("404");
         }
         $subscription->getUpdatedAt() ? $upd = $subscription->getUpdatedAt()->format("D, d M y H:i:s") : $upd = null ;
         return new JsonResponse(['id' => $subscription->getId(),
@@ -52,7 +53,7 @@ class SubscriptionController extends AbstractController
     public function index1(SubscriptionsRepository $subscriptionsRepository): Response
     {
         return $this->render('subscription/index.html.twig', [
-            'subscriptions' => $subscriptionsRepository->findByExampleField(),
+            'subscriptions' => $subscriptionsRepository->findUpdPrice(),
         ]);
 
     }
