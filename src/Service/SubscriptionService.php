@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Repository\SubscriptionsRepository;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class SubscriptionService
 {
