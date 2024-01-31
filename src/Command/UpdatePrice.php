@@ -35,7 +35,7 @@ class UpdatePrice extends Command
         $total = 0;
         foreach ($subscriptions as $subscription) {
             $url = $subscription->getUrl();
-            $price = $this->responseService->checkResponse($url, 200,"application/json; charset=utf-8", 'price');
+            $price = $this->responseService->getKeyFromResponse($url, 200,"application/json; charset=utf-8", 'price');
             $this->subscriptionsRepository->updateSelectedPrice($subscription->getId(), $price);
             echo $url . " - " . $price . "\n";
             $total += 1;

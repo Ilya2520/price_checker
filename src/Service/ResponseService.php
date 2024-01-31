@@ -10,7 +10,7 @@ class ResponseService{
         $this->client = $client;
     }
 
-    public function checkResponse($url, $requireStatus, $requireContentType, $requireKey)
+    public function getKeyFromResponse($url, $requireStatus, $requireContentType, $requireKey)
     {
         $response = $this->client->request(
             'GET',
