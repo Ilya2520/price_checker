@@ -1,20 +1,24 @@
 <?php
 namespace App\Command;
 
+use App\Repository\SubscriptionsRepository;
+use ResponseService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\Service\SubscriptionService;
 #[AsCommand(name: "subscription:update_price")]
 class UpdatePrice extends Command
 {
     protected static $defaultDescription = 'Update price.';
-    private $subscriptionService;
+    private $subscriptionsRepository;
+    private $responseService;
 
-    public function __construct(SubscriptionService $subscriptionService)
+    public function __construct(SubscriptionsRepository $subscriptionsRepository,
+                                ResponseService $responseService)
     {
-        $this->subscriptionService=$subscriptionService;
+        $this->subscriptionsRepository = $subscriptionsRepository;
+        $this->responseService=$responseService;
 
         parent::__construct();
     }
@@ -27,7 +31,17 @@ class UpdatePrice extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('');
-        $this->subscriptionService->updPrice();
+        $subs = $this->subscriptionsRepository->findAll();
+        $total = 0;
+        foreach ($subs as $sub) {
+            $url = $sub->getUrl();
+            $price = $this->responseService->checkResponse($url, 200,"application/json; charset=utf-8", 'price');
+            $this->subscriptionsRepository->updateSelectedPrice($sub->getId(), $price);
+            echo $url . " - " . $price . "\n";
+            $total += 1;
+        }
+
+        echo "Total: $total\n";
         return Command::SUCCESS;
     }
 

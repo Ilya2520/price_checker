@@ -14,24 +14,15 @@ use Twig\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
 class SubscriptionController extends AbstractController
 {
-    #[Route('/subscriptions', name: 'subscriptions')]
-    public function index(SubscriptionsRepository $subscriptionsRepository): Response
-    {
-        return $this->render('subscription/index.html.twig', [
-            'subscriptions' => $subscriptionsRepository->findAll(),
-        ]);
-
-    }
-    #[Route('/subscription/{id}', name: 'subscription')]
-    public function show(Environment $twig, Subscriptions $subscription): Response
-    {
-        return new Response($twig->render('subscription/show.html.twig', [
-            'subscription' => $subscription,
-        ]));
-    }
     #[Route('api/subscription/{id}', name: 'subscription')]
     public function shows($id, SubscriptionService $subscriptionsService)
     {
-        return $subscriptionsService->getResponseToShowConcreate($id);
+        $subscription =  $this->subscriptionsRepository->find($id);
+        if (!$subscription) {
+            $response = new JsonResponse(['message'=>"not found"]);
+            return $response->setStatusCode("404");
+        }
+        $json =  $subscriptionsService->subscriptionToJson($subscription);
+        return new JsonResponse($json);
     }
 }

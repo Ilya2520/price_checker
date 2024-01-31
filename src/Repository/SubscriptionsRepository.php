@@ -22,7 +22,7 @@ class SubscriptionsRepository extends ServiceEntityRepository
         parent::__construct($registry, Subscriptions::class);
     }
 
-    public function findUpdPrice(): array
+    public function findNewUpdatedPrice(): array
     {
         $arr=  $this->createQueryBuilder('s')
             ->andWhere('s.price > 0 and s.updatedAt is not null')
@@ -33,7 +33,7 @@ class SubscriptionsRepository extends ServiceEntityRepository
         return $arr;
     }
 
-    public function update($id, $price)
+    public function updateSelectedPrice($id, $price)
     {
         $entityManager = $this->getEntityManager();
         $query = $entityManager->createQuery(

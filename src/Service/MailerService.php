@@ -3,37 +3,27 @@ namespace App\Service;
 
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use App\Repository\SubscriptionsRepository;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 class MailerService
 {
     private $mailer;
-    private $subscriptionsRepository;
-    public function __construct(MailerInterface $mailer, SubscriptionsRepository $subscriptionsRepository)
+    public function __construct(MailerInterface $mailer)
     {
         $this->mailer = $mailer;
-        $this->subscriptionsRepository=$subscriptionsRepository;
     }
 
-    public function sendEmail():void
+    public function sendEmail($name, $price, $mailTo):bool
     {
-        $arr = $this->subscriptionsRepository->findUpdPrice();
-        $send_emails = 0;
-        foreach ($arr as $ar){
-            $name = $ar->getUserId()->getName();
-            $price = $ar->getPrice();
-            $email = (new Email())
+        $email = (new Email())
                 ->from('randreq@inbox.ru')
-                ->to($ar->getUserId()->getEmail())
+                ->to($mailTo)
                 ->subject('Price check')
                 ->text("Hello $name, there are a new price on your subscribe, price: $price");
             try {
                 $this->mailer->send($email);
-                $send_emails += 1;
+                return true;
             } catch (TransportExceptionInterface $e) {
-                echo "Error send\n";
+                return false;
             }
-        }
-        echo "Total: $send_emails\n";
     }
 }

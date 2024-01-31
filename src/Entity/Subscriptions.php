@@ -32,7 +32,7 @@ class Subscriptions
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Users $userId = null;
+    private ?Users $user = null;
 
     public function getId(): ?int
     {
@@ -87,14 +87,14 @@ class Subscriptions
         return $this;
     }
 
-    public function getUserId(): ?Users
+    public function getUser(): ?Users
     {
-        return $this->userId;
+        return $this->user;
     }
 
-    public function setUserId(?Users $userId): static
+    public function setUser(?Users $user): static
     {
-        $this->userId = $userId;
+        $this->user = $user;
 
         return $this;
     }
@@ -113,6 +113,6 @@ class Subscriptions
 
     public function __toString(): string
     {
-        return $this->id . '     '.$this->url.' '.$this->price.' '.$this->userId->getName().' '.$this->userId->getEmail();
+        return $this->id . '     '.$this->url.' '.$this->price.' '.$this->user->getName().' '.$this->user->getEmail();
     }
 }
