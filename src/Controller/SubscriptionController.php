@@ -12,12 +12,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Subscriptions;
 use Twig\Environment;
 use Symfony\Component\HttpFoundation\JsonResponse;
+
 class SubscriptionController extends AbstractController
 {
     #[Route('api/subscription/{id}', name: 'subscription')]
     public function getConcreteSubscription($id, SubscriptionService $subscriptionsService)
     {
-        $json =  $subscriptionsService->subscriptionToJson($id);
+        $json = $subscriptionsService->subscriptionToJson($id);
         $response = new JsonResponse($json['message']);
         return $response->setStatusCode($json['status']);
     }

@@ -1,7 +1,9 @@
 <?php
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-class ResponseService{
+
+class ResponseService
+{
 
     private $client;
 
@@ -35,7 +37,7 @@ class ResponseService{
             return false;
         }
 
-        return  $content[$requireKey];
+        return $content[$requireKey];
     }
 
 }

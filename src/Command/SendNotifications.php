@@ -13,10 +13,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 class SendNotifications extends Command
 {
     private $mailerService;
-
     private $subscriptionsRepository;
     protected static $defaultDescription = 'Send notifications.';
-
 
     public function __construct(MailerService $mailerService, SubscriptionsRepository $subscriptionsRepository)
     {
@@ -37,6 +35,7 @@ class SendNotifications extends Command
         $output->writeln('');
         $updatedSubscriptions = $this->subscriptionsRepository->findNewUpdatedPrice();
         $send_emails = 0;
+
         foreach ($updatedSubscriptions as $updatedSubscription) {
             $mailTo = $updatedSubscription->getUserId()->getEmail();
             $name = $updatedSubscription->getUserId()->getName();
@@ -45,6 +44,7 @@ class SendNotifications extends Command
             if ($result === true) $send_emails += 1;
             else echo "Error send email";
         }
+
         echo "Total: $send_emails\n";
         return Command::SUCCESS;
     }

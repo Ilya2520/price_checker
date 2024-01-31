@@ -24,12 +24,11 @@ class SubscriptionsRepository extends ServiceEntityRepository
 
     public function findNewUpdatedPrice(): array
     {
-        $arr=  $this->createQueryBuilder('s')
+        $arr = $this->createQueryBuilder('s')
             ->andWhere('s.price > 0 and s.updatedAt is not null')
             ->orderBy('s.id', 'ASC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
         return $arr;
     }
 
