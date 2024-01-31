@@ -17,12 +17,8 @@ class SubscriptionController extends AbstractController
     #[Route('api/subscription/{id}', name: 'subscription')]
     public function shows($id, SubscriptionService $subscriptionsService)
     {
-        $subscription =  $this->subscriptionsRepository->find($id);
-        if (!$subscription) {
-            $response = new JsonResponse(['message'=>"not found"]);
-            return $response->setStatusCode("404");
-        }
-        $json =  $subscriptionsService->subscriptionToJson($subscription);
-        return new JsonResponse($json);
+        $json =  $subscriptionsService->subscriptionToJson($id);
+        $response = new JsonResponse($json['message']);
+        return $response->setStatusCode($json['status']);
     }
 }
