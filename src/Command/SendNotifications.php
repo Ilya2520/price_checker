@@ -35,12 +35,12 @@ class SendNotifications extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('');
-        $arr = $this->subscriptionsRepository->findNewUpdatedPrice();
+        $updatedSubscriptions = $this->subscriptionsRepository->findNewUpdatedPrice();
         $send_emails = 0;
-        foreach ($arr as $ar) {
-            $mailTo = $ar->getUserId()->getEmail();
-            $name = $ar->getUserId()->getName();
-            $price = $ar->getPrice();
+        foreach ($updatedSubscriptions as $updatedSubscription) {
+            $mailTo = $updatedSubscription->getUserId()->getEmail();
+            $name = $updatedSubscription->getUserId()->getName();
+            $price = $updatedSubscription->getPrice();
             $result = $this->mailerService->sendEmail($name, $price, $mailTo);
             if ($result === true) $send_emails += 1;
             else echo "Error send email";

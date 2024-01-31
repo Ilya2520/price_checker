@@ -31,12 +31,12 @@ class UpdatePrice extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('');
-        $subs = $this->subscriptionsRepository->findAll();
+        $subscriptions = $this->subscriptionsRepository->findAll();
         $total = 0;
-        foreach ($subs as $sub) {
-            $url = $sub->getUrl();
+        foreach ($subscriptions as $subscription) {
+            $url = $subscription->getUrl();
             $price = $this->responseService->checkResponse($url, 200,"application/json; charset=utf-8", 'price');
-            $this->subscriptionsRepository->updateSelectedPrice($sub->getId(), $price);
+            $this->subscriptionsRepository->updateSelectedPrice($subscription->getId(), $price);
             echo $url . " - " . $price . "\n";
             $total += 1;
         }
